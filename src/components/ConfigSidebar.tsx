@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { DownloadButton } from "@/components/DownloadButton";
-import type { PaletteState } from "@/types/palette";
+import type { PaletteState, ColorPreset } from "@/types/palette";
 import { COLOR_PRESETS } from "@/types/palette";
 
 type ConfigSidebarProps = {
@@ -18,7 +18,8 @@ type ConfigSidebarProps = {
 };
 
 export function ConfigSidebar({ state, onChange }: ConfigSidebarProps) {
-  const handlePresetChange = (presetName: string) => {
+  const handlePresetChange = (presetName: string | null) => {
+    if (!presetName) return;
     const preset = COLOR_PRESETS.find((p) => p.name === presetName);
     if (!preset) return;
 
@@ -48,7 +49,8 @@ export function ConfigSidebar({ state, onChange }: ConfigSidebarProps) {
     });
   };
 
-  const handleColumnsChange = (value: string) => {
+  const handleColumnsChange = (value: string | null) => {
+    if (!value) return;
     const newColumns = parseInt(value, 10);
     const newColors = [...state.colors];
 
@@ -364,24 +366,4 @@ function findCurrentPreset(colors: string[]): ColorPreset | null {
     if (matches) return preset;
   }
   return null;
-}
-
-function generateRandomColor(): string {
-  const hue = Math.floor(Math.random() * 360);
-  const saturation = Math.floor(Math.random() * 30) + 20;
-  const lightness = Math.floor(Math.random() * 30) + 40;
-  return hslToHex(hue, saturation, lightness);
-}
-
-function hslToHex(h: number, s: number, l: number): string {
-  l /= 100;
-  const a = (s * Math.min(l, 1 - l)) / 100;
-  const f = (n: number) => {
-    const k = (n + h / 30) % 12;
-    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-    return Math.round(255 * color)
-      .toString(16)
-      .padStart(2, "0");
-  };
-  return `#${f(0)}${f(8)}${f(4)}`;
 }

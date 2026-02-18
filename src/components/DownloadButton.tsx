@@ -49,7 +49,7 @@ export function DownloadButton({ state }: DownloadButtonProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger>
         <Button className="w-full" variant="default">
           <HugeiconsIcon icon={Download01Icon} strokeWidth={2} />
           Download
